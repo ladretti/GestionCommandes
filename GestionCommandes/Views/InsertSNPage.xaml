@@ -1,0 +1,45 @@
+﻿<Page
+    x:Class="GestionCommandes.Views.InsertSNPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:converters="using:GestionCommandes.Helpers"
+    mc:Ignorable="d">
+	<Page.Resources>
+		<CollectionViewSource x:Name="SourceFiltered2" IsSourceGrouped="True"/>
+		<converters:CustomNewCalendarDatePicker  x:Key="CustomNewCalendarDatePicker" />
+		<converters:IntegerTextBox  x:Key="IntegerTextBox" />
+		<converters:StringToDateTimeConverter x:Key="StringToDateTimeConverter" />
+	</Page.Resources>
+	<Grid MaxWidth="1000">
+		<ScrollViewer VerticalScrollBarVisibility="Auto">
+			<StackPanel>
+				<StackPanel Orientation="Horizontal">
+					<TextBlock Text="Quantité commandé :" Margin="0,0,10,0" VerticalAlignment="Center"/>
+					<TextBlock Text="{Binding SelectedCommande.QuantiteCommande}" Margin="0,0,10,0" VerticalAlignment="Center"/>
+					<TextBlock Text="Quantité reçu :" Margin="0,0,10,0" VerticalAlignment="Center"/>
+					<NumberBox x:Name="IntTextBox" Text="{Binding SelectedCommande.QuantiteRecu, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Maximum="200" ValueChanged="IntTextBox_TextChanged" Margin="0,0,10,0" VerticalAlignment="Center"/>
+				</StackPanel>
+				<StackPanel Orientation="Horizontal">
+					<TextBlock Text="Date de reception :" Margin="0,0,10,0" VerticalAlignment="Center"/>
+					<CalendarDatePicker DateFormat="{}{day.integer(2)}/{month.integer(2)}/{year.full}"
+                     Language="fr-FR"
+                     CalendarIdentifier="GregorianCalendar" Date="{Binding SelectedCommande.DateReception, Mode=TwoWay, Converter={StaticResource StringToDateTimeConverter}, UpdateSourceTrigger=PropertyChanged}" x:Name="DatePicker"/>
+				</StackPanel>
+				<ItemsControl x:Name="ParametresItemsControl" ItemsSource="{Binding StringList}">
+					<ItemsControl.ItemsPanel>
+						<ItemsPanelTemplate>
+							<WrapGrid Orientation="Horizontal"/>
+						</ItemsPanelTemplate>
+					</ItemsControl.ItemsPanel>
+					<ItemsControl.ItemTemplate>
+						<DataTemplate>
+							<TextBox PlaceholderText="{Binding}" Margin="5" MinWidth="150" KeyDown="TextBox_KeyDown"/>
+						</DataTemplate>
+					</ItemsControl.ItemTemplate>
+				</ItemsControl>
+			</StackPanel>
+		</ScrollViewer>
+	</Grid>
+</Page>

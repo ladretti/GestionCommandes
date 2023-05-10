@@ -16,6 +16,21 @@ public sealed partial class DataGridCommandesPage : Page
     public DataGridCommandesPage()
     {
         ViewModel = App.GetService<DataGridCommandesViewModel>();
+        DataContext = ViewModel;
         InitializeComponent();
+    }
+
+    private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        ViewModel.UpdateData();
+    }
+    private void myDatePicker_DateChanged(object sender, DatePickerValueChangedEventArgs e)
+    {
+        ViewModel.UpdateData();
+    }
+
+    private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+    {
+       ViewModel.UpdateData();
     }
 }

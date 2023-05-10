@@ -1,6 +1,7 @@
 ﻿using GestionCommandes.Activation;
 using GestionCommandes.Contracts.Services;
 using GestionCommandes.Core.Contracts.Services;
+using GestionCommandes.Core.Models;
 using GestionCommandes.Core.Services;
 using GestionCommandes.Helpers;
 using GestionCommandes.Models;
@@ -63,13 +64,24 @@ public partial class App : Application
 
             // Core Services
             services.AddSingleton<ISampleDataService, SampleDataService>();
+            services.AddSingleton<ICommandeDataService, CommandeService>();
+            services.AddSingleton<IFournisseurDataService, FournisseurService>();
+            services.AddSingleton<IClientDataService, ClientService>();
             services.AddSingleton<IFileService, FileService>();
 
             // Views and ViewModels
+            services.AddTransient<InsertSNViewModel>();
+            services.AddTransient<InsertSNPage>();
+
+            services.AddTransient<SettingsViewModel>();
+            services.AddTransient<SettingsPage>();
+
             services.AddTransient<DataGridCommandesViewModel>();
             services.AddTransient<DataGridCommandesPage>();
+
             services.AddTransient<AccueilViewModel>();
             services.AddTransient<AccueilPage>();
+
             services.AddTransient<ShellPage>();
             services.AddTransient<ShellViewModel>();
 

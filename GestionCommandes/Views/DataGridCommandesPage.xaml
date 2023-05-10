@@ -5,45 +5,76 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
+    xmlns:converters="using:GestionCommandes.Helpers"
     mc:Ignorable="d">
+    <Page.Resources>
+        <CollectionViewSource x:Name="SourceFiltered2" IsSourceGrouped="True"/>
+        <converters:CustomNewCalendarDatePicker  x:Key="CustomNewCalendarDatePicker" />
+        <converters:StringToDateTimeConverter x:Key="StringToDateTimeConverter" />
+    </Page.Resources>
 
     <Grid x:Name="ContentArea">
         <Grid.RowDefinitions>
-            <RowDefinition Height="48" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="48"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        
+        <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
+            <Button Command="{Binding RefreshFilter}" Margin="0,0,10,0">
+                <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xe10a;"/>
+            </Button>
+            <ComboBox SelectedItem="{Binding SelectedFournisseurValue, Mode=TwoWay}"
+                  PlaceholderText="Fournisseur"
+                  ItemsSource="{Binding SourceFournisseurs, Mode=TwoWay}"
+                  DisplayMemberPath="Name"
+                  SelectionChanged="ComboBox_SelectionChanged"
+                  Margin="0,9,15,0"/>
+            <ComboBox SelectedItem="{Binding SelectedClientValue, Mode=TwoWay}"
+                  PlaceholderText="Clients"
+                  ItemsSource="{Binding SourceClients, Mode=TwoWay}"
+                  DisplayMemberPath="Name"
+                  SelectionChanged="ComboBox_SelectionChanged"
+                  Margin="0,9,15,0"/>
+            <DatePicker
+                    DateChanged="myDatePicker_DateChanged"
+                    Date="{Binding DateSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    Language="fr-FR"
+                    CalendarIdentifier="GregorianCalendar"/>
+            <TextBox TextChanged="TextBox_TextChanged" Grid.Row="0" PlaceholderText="Recherche" Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,50,0" Height="24" Width="200"/>
 
-        <TextBlock
-            Grid.Row="0"
-            x:Uid="DataGridCommandes_Title"
-            Style="{StaticResource PageTitleStyle}" />
+            <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
+                <Button Command="{Binding AddSN}" Margin="0,0,0,0" HorizontalAlignment="Right" >
+                    <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xe10C;"/>
+                </Button>
+            </StackPanel>
+        </StackPanel>
         <controls:DataGrid
             Grid.Row="1"
             AutoGenerateColumns="False"
             GridLinesVisibility="Horizontal"
-            ItemsSource="{x:Bind ViewModel.Source, Mode=OneWay}">
+            ItemsSource="{x:Bind ViewModel.SourceFiltered2.View, Mode=OneWay}"
+             SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
             <controls:DataGrid.Resources>
                 <SolidColorBrush x:Key="DataGridColumnHeaderBackgroundColor" Color="Transparent" />
             </controls:DataGrid.Resources>
             <controls:DataGrid.Columns>
                 <!-- TODO: Replace column definitions to match real data. Consider adding Header values to Resources.resw. -->
-                <controls:DataGridTextColumn Binding="{Binding OrderID}" Header="OrderID" />
-                <controls:DataGridTextColumn Binding="{Binding OrderDate}" Header="OrderDate" />
-                <controls:DataGridTextColumn Binding="{Binding Company}" Header="Company" />
-                <controls:DataGridTextColumn Binding="{Binding ShipTo}" Header="ShipTo" />
-                <controls:DataGridTextColumn Binding="{Binding OrderTotal}" Header="OrderTotal" />
-                <controls:DataGridTextColumn Binding="{Binding Status}" Header="Status" />
-                <controls:DataGridTemplateColumn Header="Symbol">
-                    <controls:DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <FontIcon
-                                HorizontalAlignment="Left"
-                                FontFamily="{ThemeResource SymbolThemeFontFamily}"
-                                Glyph="{Binding Symbol}"
-                                AutomationProperties.Name="{Binding SymbolName}" />
-                        </DataTemplate>
-                    </controls:DataGridTemplateColumn.CellTemplate>
-                </controls:DataGridTemplateColumn>
+                <controls:DataGridTextColumn Binding="{Binding Id}" Header="Id" />
+                <controls:DataGridTextColumn Binding="{Binding NumCommande}" Header="Num Cmd" />
+                <controls:DataGridTextColumn Binding="{Binding Fournisseur.Name}" Header="Fournisseur" />
+                <controls:DataGridTextColumn Binding="{Binding Client.Name}" Header="Client" />
+                <controls:DataGridTextColumn Binding="{Binding DateCommande}" Header="Date Cmd" />
+                <controls:DataGridTextColumn Binding="{Binding Designation}" Header="Desi" />
+                <controls:DataGridTextColumn Binding="{Binding Ref}" Header="Ref" />
+                <controls:DataGridTextColumn Binding="{Binding NumCommande2}" Header="Num cmd" />
+                <controls:DataGridTextColumn Binding="{Binding QuantiteCommande}" Header="Qtt Cmd" />
+                <controls:DataGridTextColumn Binding="{Binding QuantiteRecu}" Header="Qtt Reçu" />
+                <controls:DataGridTextColumn Binding="{Binding DateReception}" Header="Date Rpt" />
+                <controls:DataGridTextColumn Binding="{Binding SN}" Header="SN" />
             </controls:DataGrid.Columns>
         </controls:DataGrid>
     </Grid>
