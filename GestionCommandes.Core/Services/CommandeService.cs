@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.OleDb;
 using System.Linq;
 using System.Text;
@@ -23,9 +24,10 @@ public class CommandeService : ICommandeDataService
         await Task.CompletedTask;
         return _allCommandes;
     }
-    public Task ModifyCommandeAsync(Commande commande)
+    public async Task ModifyCommandeAsync(Commande commande)
     {
-        return null;
+        ModifyCommande(commande);
+        await Task.CompletedTask;
     }
     public Task<IEnumerable<Commande>> RefreshDataAsync()
     {
@@ -56,7 +58,7 @@ public class CommandeService : ICommandeDataService
                         Int32? quantiteRecu = null;
                         string nameClient = null;
                         double? numCommande2 = null;
-                        string   serialNumber = null;
+                        string serialNumber = null;
                         DateTime? dateReception = null;
 
                         // Récupérer les valeurs des colonnes de la ligne courante
@@ -92,5 +94,29 @@ public class CommandeService : ICommandeDataService
         }
 
         return listCommande;
+    }
+    private void ModifyCommande(Commande commande)
+    {
+        using (OleDbConnection connection = new OleDbConnection(connectionString))
+        {
+            try
+            {
+                // Requête d'insertion SQL avec des paramètres
+                OleDbCommand cmd = new OleDbCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = $"UPDATE commandes SET [Date Réception] = '" + commande.DateReception + "' ," +
+                                                        " [Qté Reçue] ='" + commande.QuantiteRecu + "'," +
+                                                        " SN='" + commande.SN + "' " +
+                                                        " WHERE Commandes.[N° Enreg] = " + commande.Id;
+                cmd.Connection = connection;
+                connection.Open();
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException("" + ex.Message);
+            }
+        }
+
     }
 }

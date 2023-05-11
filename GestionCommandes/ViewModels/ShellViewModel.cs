@@ -19,7 +19,17 @@ public class ShellViewModel : ObservableRecipient
         get;
     }
 
-    public ICommand MenuViewsInsertSNCommand
+    public ICommand MenuViewsModifySNCommand
+    {
+        get;
+    }
+
+    public ICommand MenuViewsListDetailsCommand
+    {
+        get;
+    }
+
+    public ICommand MenuViewsGestionSNCommand
     {
         get;
     }
@@ -61,7 +71,8 @@ public class ShellViewModel : ObservableRecipient
         NavigationService.Navigated += OnNavigated;
 
         MenuFileExitCommand = new RelayCommand(OnMenuFileExit);
-        MenuViewsInsertSNCommand = new RelayCommand(OnMenuViewsInsertSN);
+        MenuViewsModifySNCommand = new RelayCommand(OnMenuViewsModifySN);
+        MenuViewsGestionSNCommand = new RelayCommand(OnMenuViewsGestionSN);
         MenuSettingsCommand = new RelayCommand(OnMenuSettings);
         MenuViewsDataGridCommandesCommand = new RelayCommand(OnMenuViewsDataGridCommandes);
         MenuViewsAccueilCommand = new RelayCommand(OnMenuViewsAccueil);
@@ -71,7 +82,10 @@ public class ShellViewModel : ObservableRecipient
 
     private void OnMenuFileExit() => Application.Current.Exit();
 
-    private void OnMenuViewsInsertSN() => NavigationService.NavigateTo(typeof(InsertSNViewModel).FullName!);
+    private void OnMenuViewsModifySN() => NavigationService.NavigateTo(typeof(ModifySNViewModel).FullName!);
+
+    private void OnMenuViewsGestionSN() => NavigationService.NavigateTo(typeof(GestionSNViewModel).FullName!);
+
 
     private void OnMenuSettings() => NavigationService.NavigateTo(typeof(SettingsViewModel).FullName!);
 

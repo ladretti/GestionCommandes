@@ -70,8 +70,11 @@ public partial class App : Application
             services.AddSingleton<IFileService, FileService>();
 
             // Views and ViewModels
-            services.AddTransient<InsertSNViewModel>();
-            services.AddTransient<InsertSNPage>();
+            services.AddTransient<ModifySNViewModel>();
+            services.AddTransient<ModifySNPage>();
+            
+            services.AddTransient<GestionSNViewModel>();
+            services.AddTransient<GestionSNPage>();
 
             services.AddTransient<SettingsViewModel>();
             services.AddTransient<SettingsPage>();

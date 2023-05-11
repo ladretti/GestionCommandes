@@ -124,6 +124,14 @@ public class DataGridCommandesViewModel : ObservableRecipient, INavigationAware,
 
     public async void OnNavigatedTo(object parameter)
     {
+        Refresh();
+    }
+
+    public void OnNavigatedFrom()
+    {
+    }
+    public async void Refresh()
+    {
         Source.Clear();
         SourceFournisseurs.Clear();
         SourceClients.Clear();
@@ -157,10 +165,6 @@ public class DataGridCommandesViewModel : ObservableRecipient, INavigationAware,
             SourceFournisseurs.Add(item);
         }
         SourceFiltered2.Source = Source.OrderByDescending(q => q.DateCommande).ThenBy(q => q.NumCommande2).ThenBy(q => q.NumCommande).ToList();
-    }
-
-    public void OnNavigatedFrom()
-    {
     }
 
     public event PropertyChangedEventHandler PropertyChanged;
@@ -224,8 +228,8 @@ public class DataGridCommandesViewModel : ObservableRecipient, INavigationAware,
     {
         ContentDialog _addDialog;
 
-        var insertionPage = new InsertSNPage();
-        var insertionViewModel = new InsertSNViewModel(SelectedItem);
+        var insertionPage = new GestionSNPage();
+        var insertionViewModel = new GestionSNViewModel(SelectedItem, _sampleDataService);
         insertionPage.DataContext = insertionViewModel;
 
         _addDialog = new ContentDialog
@@ -234,11 +238,14 @@ public class DataGridCommandesViewModel : ObservableRecipient, INavigationAware,
             Title = "Enregistrement",
             CloseButtonText = "Annuler",
             PrimaryButtonText = "Valider",
-            //PrimaryButtonCommand = insertionViewModel.AddRenouvellementCommand,
+            PrimaryButtonCommand = insertionViewModel.ValidationCommande,
         };
         _addDialog.XamlRoot = App.MainWindow.Content.XamlRoot;
         await _addDialog.ShowAsync();
-        //RefreshData();
+        if (insertionViewModel.IsCommandExecuted)
+        {
+            Refresh();
+        }
     }
 
 }

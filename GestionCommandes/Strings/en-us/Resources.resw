@@ -135,4 +135,24 @@
     <value>InsertSN</value>
     <comment>Page title for InsertSNPage</comment>
   </data>
+  <data name="ShellMenuItem_Views_GestionSN.Text" xml:space="preserve">
+    <value>GestionSN</value>
+  </data>
+  <data name="GestionSN_Title.Text" xml:space="preserve">
+    <value>GestionSN</value>
+    <comment>Page title for GestionSNPage</comment>
+  </data>
+  <data name="ListDetails_NoSelection.Text" xml:space="preserve">
+    <value>Select an item from the list.</value>
+  </data>
+  <data name="ShellMenuItem_Views_ListDetails.Text" xml:space="preserve">
+    <value>ListDetails</value>
+  </data>
+  <data name="ShellMenuItem_Views_ModifySN.Text" xml:space="preserve">
+    <value>ModifySN</value>
+  </data>
+  <data name="ModifySN_Title.Text" xml:space="preserve">
+    <value>ModifySN</value>
+    <comment>Page title for ModifySNPage</comment>
+  </data>
 </root>

@@ -17,7 +17,9 @@ public class PageService : IPageService
         Configure<AccueilViewModel, AccueilPage>();
         Configure<DataGridCommandesViewModel, DataGridCommandesPage>();
         Configure<SettingsViewModel, SettingsPage>();
-        Configure<InsertSNViewModel, InsertSNPage>();
+        Configure<GestionSNViewModel, GestionSNPage>();
+        
+        Configure<ModifySNViewModel, ModifySNPage>();
     }
 
     public Type GetPageType(string key)
