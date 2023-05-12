@@ -226,28 +226,52 @@ public class DataGridCommandesViewModel : ObservableRecipient, INavigationAware,
     }
     private async void OnMenuViewsInsertSN()
     {
+        bool ok = false;
         ContentDialog _addDialog;
 
-        var insertionPage = new GestionSNPage();
-        var insertionViewModel = new GestionSNViewModel(SelectedItem, _sampleDataService);
-        insertionPage.DataContext = insertionViewModel;
+        if (SelectedItem.QuantiteRecu != 0 || SelectedItem.SN != null || SelectedItem.DateReception != null)
+        {
+            var page = new ModifySNPage();
+            var viewmodel = new ModifySNViewModel(SelectedItem, _sampleDataService);
+            page.DataContext = viewmodel;
+            _addDialog = new ContentDialog
+            {
+                Content = page,
+                Title = "Enregistrement",
+                CloseButtonText = "Annuler",
+                PrimaryButtonText = "Valider",
+                PrimaryButtonCommand = viewmodel.ValidationCommande,
+            };
+            _addDialog.XamlRoot = App.MainWindow.Content.XamlRoot;
+            await _addDialog.ShowAsync();
+            ok = viewmodel.IsCommandExecuted;
+        }
+        else
+        {
+            Page page = new GestionSNPage();
+            var viewmodel = new GestionSNViewModel(SelectedItem, _sampleDataService);
+            page.DataContext = viewmodel;
+            _addDialog = new ContentDialog
+            {
+                Content = page,
+                Title = "Enregistrement",
+                CloseButtonText = "Annuler",
+                PrimaryButtonText = "Valider",
+                PrimaryButtonCommand = viewmodel.ValidationCommande,
+            };
+            _addDialog.XamlRoot = App.MainWindow.Content.XamlRoot;
+            await _addDialog.ShowAsync();
+            ok = viewmodel.IsCommandExecuted;
+        }
 
-        _addDialog = new ContentDialog
+        if (ok)
         {
-            Content = insertionPage,
-            Title = "Enregistrement",
-            CloseButtonText = "Annuler",
-            PrimaryButtonText = "Valider",
-            PrimaryButtonCommand = insertionViewModel.ValidationCommande,
-        };
-        _addDialog.XamlRoot = App.MainWindow.Content.XamlRoot;
-        await _addDialog.ShowAsync();
-        if (insertionViewModel.IsCommandExecuted)
-        {
+            var cmd = SelectedItem;
             Refresh();
+            SelectedItem = cmd;
+            SearchText = cmd.NumCommande;
         }
     }
-
 }
 
 

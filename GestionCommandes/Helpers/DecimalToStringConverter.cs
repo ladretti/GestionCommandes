@@ -11,7 +11,7 @@ namespace GestionCommandes.Helpers
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            if (value is decimal decimalValue)
+            if (value is int decimalValue)
             {
                 return decimalValue.ToString();
             }

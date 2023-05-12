@@ -8,6 +8,7 @@ using GestionCommandes.Core.Contracts.Services;
 using GestionCommandes.Core.Models;
 using GestionCommandes.Core.Services;
 using GestionCommandes.Models;
+using GestionCommandes.Services;
 
 namespace GestionCommandes.ViewModels;
 
@@ -81,13 +82,19 @@ public class GestionSNViewModel : ObservableRecipient, INotifyPropertyChanged
     }
     public async void Validation()
     {
-        SelectedCommande.QuantiteRecu = NumberOfStrings;
-        string leString = "";
-        foreach (Strong s in MyStrings)
+        if (NumberOfStrings != null)
         {
-            leString += s.Value + " ";
+            SelectedCommande.QuantiteRecu = NumberOfStrings;
         }
-        SelectedCommande.SN = leString;
+        if (MyStrings != null)
+        {
+            string leString = "";
+            foreach (Strong s in MyStrings)
+            {
+                leString += s.Value + " ";
+            }
+            SelectedCommande.SN = leString;
+        }
         try
         {
             await _sampleDataService.ModifyCommandeAsync(SelectedCommande);
