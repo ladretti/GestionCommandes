@@ -37,5 +37,9 @@ public sealed partial class GestionSNPage : Page
 
         }
     }
+    private void TextBox_TextChanged(object sender, NumberBoxValueChangedEventArgs e)
+    {
+        ViewModel.InitializeMyStrings();
+    }
 
 }

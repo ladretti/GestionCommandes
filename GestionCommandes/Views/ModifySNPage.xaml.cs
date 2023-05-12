@@ -34,4 +34,8 @@ public sealed partial class ModifySNPage : Page
 
         }
     }
+    private void TextBox_TextChanged(object sender, NumberBoxValueChangedEventArgs e)
+    {
+        ViewModel.InitializeMyStrings();
+    }
 }

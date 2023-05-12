@@ -155,4 +155,11 @@
     <value>ModifySN</value>
     <comment>Page title for ModifySNPage</comment>
   </data>
+  <data name="ShellMenuItem_Views_Loading.Text" xml:space="preserve">
+    <value>Loading</value>
+  </data>
+  <data name="Loading_Title.Text" xml:space="preserve">
+    <value>Loading</value>
+    <comment>Page title for LoadingPage</comment>
+  </data>
 </root>

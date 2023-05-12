@@ -14,6 +14,11 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Data;
 using GestionCommandes.Views;
 using GestionCommandes.Contracts.Services;
+using Microsoft.UI.Xaml.Media;
+using Microsoft.UI;
+using Windows.UI.Core;
+using CommunityToolkit.WinUI.UI.Controls;
+using WinUIEx.Messaging;
 
 namespace GestionCommandes.ViewModels;
 
@@ -124,14 +129,30 @@ public class DataGridCommandesViewModel : ObservableRecipient, INavigationAware,
 
     public async void OnNavigatedTo(object parameter)
     {
-        Refresh();
+        await LoadData();
     }
 
     public void OnNavigatedFrom()
     {
     }
-    public async void Refresh()
+    
+    public async Task LoadData()
     {
+        // Création du ContentDialog
+        ContentDialog loadingDialog = new ContentDialog
+        {
+            Title = "Chargement en cours...",
+            Content = new ProgressRing { IsActive = true },
+            CloseButtonText = "",
+            IsPrimaryButtonEnabled = false,
+            IsSecondaryButtonEnabled = false
+        };
+
+        // Affichage du ContentDialog
+        loadingDialog.XamlRoot = App.MainWindow.Content.XamlRoot;
+        loadingDialog.ShowAsync();
+        await Task.Delay(500);
+
         Source.Clear();
         SourceFournisseurs.Clear();
         SourceClients.Clear();
@@ -165,6 +186,7 @@ public class DataGridCommandesViewModel : ObservableRecipient, INavigationAware,
             SourceFournisseurs.Add(item);
         }
         SourceFiltered2.Source = Source.OrderByDescending(q => q.DateCommande).ThenBy(q => q.NumCommande2).ThenBy(q => q.NumCommande).ToList();
+        loadingDialog.Hide();
     }
 
     public event PropertyChangedEventHandler PropertyChanged;
@@ -267,7 +289,7 @@ public class DataGridCommandesViewModel : ObservableRecipient, INavigationAware,
         if (ok)
         {
             var cmd = SelectedItem;
-            Refresh();
+            await LoadData();
             SelectedItem = cmd;
             SearchText = cmd.NumCommande;
         }

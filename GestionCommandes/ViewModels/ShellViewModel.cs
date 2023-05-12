@@ -4,8 +4,9 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
 using GestionCommandes.Contracts.Services;
-
+using GestionCommandes.Views;
 using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
 
 namespace GestionCommandes.ViewModels;
@@ -15,6 +16,11 @@ public class ShellViewModel : ObservableRecipient
     private bool _isBackEnabled;
 
     public ICommand MenuFileExitCommand
+    {
+        get;
+    }
+
+    public ICommand MenuViewsLoadingCommand
     {
         get;
     }
@@ -71,6 +77,7 @@ public class ShellViewModel : ObservableRecipient
         NavigationService.Navigated += OnNavigated;
 
         MenuFileExitCommand = new RelayCommand(OnMenuFileExit);
+        MenuViewsLoadingCommand = new RelayCommand(OnMenuViewsLoading);
         MenuViewsModifySNCommand = new RelayCommand(OnMenuViewsModifySN);
         MenuViewsGestionSNCommand = new RelayCommand(OnMenuViewsGestionSN);
         MenuSettingsCommand = new RelayCommand(OnMenuSettings);
@@ -82,14 +89,14 @@ public class ShellViewModel : ObservableRecipient
 
     private void OnMenuFileExit() => Application.Current.Exit();
 
+    private void OnMenuViewsLoading() => NavigationService.NavigateTo(typeof(LoadingViewModel).FullName!);
+
     private void OnMenuViewsModifySN() => NavigationService.NavigateTo(typeof(ModifySNViewModel).FullName!);
 
     private void OnMenuViewsGestionSN() => NavigationService.NavigateTo(typeof(GestionSNViewModel).FullName!);
 
-
     private void OnMenuSettings() => NavigationService.NavigateTo(typeof(SettingsViewModel).FullName!);
 
     private void OnMenuViewsDataGridCommandes() => NavigationService.NavigateTo(typeof(DataGridCommandesViewModel).FullName!);
-
     private void OnMenuViewsAccueil() => NavigationService.NavigateTo(typeof(AccueilViewModel).FullName!);
 }

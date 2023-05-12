@@ -125,7 +125,7 @@ public class ModifySNViewModel : ObservableRecipient, INotifyPropertyChanged
         }
     }
 
-    private void InitializeMyStrings()
+    public void InitializeMyStrings()
     {
         if (MyStrings == null)
         {

@@ -20,6 +20,7 @@ public class PageService : IPageService
         Configure<GestionSNViewModel, GestionSNPage>();
         
         Configure<ModifySNViewModel, ModifySNPage>();
+        Configure<LoadingViewModel, LoadingPage>();
     }
 
     public Type GetPageType(string key)

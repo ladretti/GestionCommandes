@@ -21,7 +21,7 @@
 					<TextBlock Text="Quantité commandé :" Margin="0,0,10,0" VerticalAlignment="Center"/>
 					<TextBlock Text="{Binding SelectedCommande.QuantiteCommande}" Margin="0,0,10,0" VerticalAlignment="Center"/>
 					<TextBlock Text="Quantité reçu :" Margin="0,0,10,0" VerticalAlignment="Center"/>
-					<NumberBox x:Name="IntTextBox" Text="{Binding NumberOfStrings, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource DecimalToStringConverter}}" Maximum="200" Margin="0,0,10,0" VerticalAlignment="Center"  KeyDown="TextBox_KeyDown"/>
+                    <NumberBox x:Name="IntTextBox" ValueChanged="TextBox_TextChanged" Text="{Binding NumberOfStrings, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource DecimalToStringConverter}}" Maximum="200" Margin="0,0,10,0" VerticalAlignment="Center"  KeyDown="TextBox_KeyDown"/>
 				</StackPanel>
 				<StackPanel Orientation="Horizontal">
 					<TextBlock Text="Date de reception :" Margin="0,0,10,0" VerticalAlignment="Center"/>

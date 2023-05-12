@@ -106,7 +106,7 @@ public class GestionSNViewModel : ObservableRecipient, INotifyPropertyChanged
         }
     }
 
-    private void InitializeMyStrings()
+    public void InitializeMyStrings()
     {
         MyStrings = new ObservableCollection<Strong>();
         for (int i = 0; i < NumberOfStrings; i++)
