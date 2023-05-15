@@ -12,6 +12,7 @@
         <converters:CustomNewCalendarDatePicker  x:Key="CustomNewCalendarDatePicker" />
         <converters:StringToDateTimeConverter x:Key="StringToDateTimeConverter" />
         <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <converters:DateFormatConverter x:Key="DateFormatConverter" />
     </Page.Resources>
 
     <Grid x:Name="ContentArea">
@@ -63,18 +64,17 @@
             </controls:DataGrid.Resources>
             <controls:DataGrid.Columns>
                 <!-- TODO: Replace column definitions to match real data. Consider adding Header values to Resources.resw. -->
-                <controls:DataGridTextColumn Binding="{Binding Id}" Header="Id" />
-                <controls:DataGridTextColumn Binding="{Binding NumCommande}" Header="Num Cmd" />
-                <controls:DataGridTextColumn Binding="{Binding Fournisseur.Name}" Header="Fournisseur" />
-                <controls:DataGridTextColumn Binding="{Binding Client.Name}" Header="Client" />
-                <controls:DataGridTextColumn Binding="{Binding DateCommande}" Header="Date Cmd" />
-                <controls:DataGridTextColumn Binding="{Binding Designation}" Header="Desi" />
-                <controls:DataGridTextColumn Binding="{Binding Ref}" Header="Ref" />
-                <controls:DataGridTextColumn Binding="{Binding NumCommande2}" Header="Num cmd" />
-                <controls:DataGridTextColumn Binding="{Binding QuantiteCommande}" Header="Qtt Cmd" />
-                <controls:DataGridTextColumn Binding="{Binding QuantiteRecu}" Header="Qtt Reçu" />
-                <controls:DataGridTextColumn Binding="{Binding DateReception}" Header="Date Rpt" />
-                <controls:DataGridTextColumn Binding="{Binding SN}" Header="SN" />
+                <controls:DataGridTextColumn IsReadOnly="True" Binding="{Binding NumCommande}" Header="Num Cmd" />
+                <controls:DataGridTextColumn IsReadOnly="True" Binding="{Binding Fournisseur.Name}" Header="Fournisseur" Width="100"/>
+                <controls:DataGridTextColumn IsReadOnly="True" Binding="{Binding Client.Name}" Header="Client" Width="250"/>
+                <controls:DataGridTextColumn IsReadOnly="True" Binding="{Binding DateCommande, Converter={StaticResource DateFormatConverter}}" Header="Date Cmd" />
+                <controls:DataGridTextColumn IsReadOnly="True" Binding="{Binding Designation}" Header="Desi" Width="350"/>
+                <controls:DataGridTextColumn IsReadOnly="True" Binding="{Binding Ref}" Header="Ref" />
+                <controls:DataGridTextColumn IsReadOnly="True" Binding="{Binding NumCommande2}" Header="Num cmd" />
+                <controls:DataGridTextColumn IsReadOnly="True" Binding="{Binding QuantiteCommande}" Header="Qtt Cmd" />
+                <controls:DataGridTextColumn IsReadOnly="True" Binding="{Binding QuantiteRecu}" Header="Qtt Reçu" />
+                <controls:DataGridTextColumn IsReadOnly="True" Binding="{Binding DateReception, Converter={StaticResource DateFormatConverter}}" Header="Date Rpt" />
+                <controls:DataGridTextColumn IsReadOnly="True" Binding="{Binding SN}" Header="SN" />
             </controls:DataGrid.Columns>
         </controls:DataGrid>
     </Grid>

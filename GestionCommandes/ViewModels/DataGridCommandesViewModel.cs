@@ -135,7 +135,7 @@ public class DataGridCommandesViewModel : ObservableRecipient, INavigationAware,
     public void OnNavigatedFrom()
     {
     }
-    
+
     public async Task LoadData()
     {
         // Création du ContentDialog
@@ -259,7 +259,7 @@ public class DataGridCommandesViewModel : ObservableRecipient, INavigationAware,
             _addDialog = new ContentDialog
             {
                 Content = page,
-                Title = "Enregistrement",
+                Title = "Enregistrement n°" + SelectedItem.Id,
                 CloseButtonText = "Annuler",
                 PrimaryButtonText = "Valider",
                 PrimaryButtonCommand = viewmodel.ValidationCommande,
@@ -276,7 +276,7 @@ public class DataGridCommandesViewModel : ObservableRecipient, INavigationAware,
             _addDialog = new ContentDialog
             {
                 Content = page,
-                Title = "Enregistrement",
+                Title = "Enregistrement n°" + SelectedItem.Id,
                 CloseButtonText = "Annuler",
                 PrimaryButtonText = "Valider",
                 PrimaryButtonCommand = viewmodel.ValidationCommande,
@@ -291,7 +291,9 @@ public class DataGridCommandesViewModel : ObservableRecipient, INavigationAware,
             var cmd = SelectedItem;
             await LoadData();
             SelectedItem = cmd;
+            SearchText = null;
             SearchText = cmd.NumCommande;
+            ok = false;
         }
     }
 }

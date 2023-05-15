@@ -14,6 +14,7 @@ public sealed partial class AccueilPage : Page
     public AccueilPage()
     {
         ViewModel = App.GetService<AccueilViewModel>();
+        this.DataContext = ViewModel;
         InitializeComponent();
     }
 }

@@ -35,9 +35,6 @@
                     <MenuBarItem.Items>
                         <MenuFlyoutItem x:Uid="ShellMenuItem_Views_DataGridCommandes" Command="{x:Bind ViewModel.MenuViewsDataGridCommandesCommand}" />
                         <MenuFlyoutItem x:Uid="ShellMenuItem_Views_Accueil" Command="{x:Bind ViewModel.MenuViewsAccueilCommand}" />
-                        <MenuFlyoutItem x:Uid="ShellMenuItem_Views_GestionSN" Command="{x:Bind ViewModel.MenuViewsGestionSNCommand}" />
-                        <MenuFlyoutItem x:Uid="ShellMenuItem_Views_ModifySN" Command="{x:Bind ViewModel.MenuViewsModifySNCommand}" />
-                        <MenuFlyoutItem x:Uid="ShellMenuItem_Views_Loading" Command="{x:Bind ViewModel.MenuViewsLoadingCommand}" />
                     </MenuBarItem.Items>
                 </MenuBarItem>
             </MenuBar>

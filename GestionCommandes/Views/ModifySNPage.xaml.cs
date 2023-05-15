@@ -23,6 +23,7 @@ public sealed partial class ModifySNPage : Page
     }
     private void TextBox_KeyDown(object sender, KeyRoutedEventArgs e)
     {
+        ViewModel.InitializeMyStrings();
         if (e.Key == VirtualKey.Enter)
         {
             InputInjector inputInjector = InputInjector.TryCreate();

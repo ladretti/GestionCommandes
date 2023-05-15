@@ -89,7 +89,7 @@ public class ModifySNViewModel : ObservableRecipient, INotifyPropertyChanged
                     MyStrings.Add(new Strong() { Value = e2 });
             }
         }
-        if (SelectedCommande.QuantiteRecu != null)
+        if (SelectedCommande.QuantiteRecu != 0)
             NumberOfStrings = (int)SelectedCommande.QuantiteRecu;
     }
 
