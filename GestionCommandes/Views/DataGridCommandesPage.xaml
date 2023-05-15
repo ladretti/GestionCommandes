@@ -46,9 +46,7 @@
                     Language="fr-FR"
                     CalendarIdentifier="GregorianCalendar"
                 Margin="0,0,15,0"/>
-            <TextBox TextChanged="TextBox_TextChanged" Grid.Row="0" PlaceholderText="Numéro Commande" Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,50,0" Height="24" Width="200"/>
-        </StackPanel>
-        <StackPanel Grid.Row="0" Grid.Column="1" Padding="0,0,0,0" Orientation="Horizontal">
+            <TextBox TextChanged="TextBox_TextChanged" Grid.Row="0" PlaceholderText="Numéro Commande" Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,20,0" Height="24" Width="200"/>
             <Button Command="{Binding AddSN}" Margin="0,0,0,0" HorizontalAlignment="Right" >
                 <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xe10C;"/>
             </Button>
