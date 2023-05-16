@@ -129,14 +129,14 @@ public class DataGridCommandesViewModel : ObservableRecipient, INavigationAware,
 
     public async void OnNavigatedTo(object parameter)
     {
-        await LoadData();
+        await LoadData(true);
     }
 
     public void OnNavigatedFrom()
     {
     }
 
-    public async Task LoadData()
+    public async Task LoadData(bool ok)
     {
         // Création du ContentDialog
         ContentDialog loadingDialog = new ContentDialog
@@ -158,7 +158,8 @@ public class DataGridCommandesViewModel : ObservableRecipient, INavigationAware,
         SourceClients.Clear();
 
         // TODO: Replace with real data.
-        var data = await _sampleDataService.GetGridDataAsync();
+            var data = await _sampleDataService.GetGridDataAsync(ok);
+
         List<Fournisseur> dataFournisseurs = new List<Fournisseur>();
         List<Client> dataCLients = new List<Client>();
 
@@ -223,7 +224,7 @@ public class DataGridCommandesViewModel : ObservableRecipient, INavigationAware,
             }
             if (!string.IsNullOrWhiteSpace(SearchText))
             {
-                data = (from item in data where item.NumCommande != null && item.NumCommande.Contains(SearchText) select item).ToList();
+                data = (from item in data where item.NumCommande != null && item.NumCommande.ToUpper().Contains(SearchText.ToUpper()) select item).ToList();
             }
 
             SourceFiltered2.Source = data;
@@ -289,7 +290,7 @@ public class DataGridCommandesViewModel : ObservableRecipient, INavigationAware,
         if (ok)
         {
             var cmd = SelectedItem;
-            await LoadData();
+            await LoadData(false);
             SelectedItem = cmd;
             SearchText = null;
             SearchText = cmd.NumCommande;

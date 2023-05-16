@@ -140,7 +140,7 @@
     <comment>Page title for AccueilPage</comment>
   </data>
   <data name="ShellMenuItem_Views_DataGridCommandes.Text" xml:space="preserve">
-    <value>DataGridCommandes</value>
+    <value>Commandes</value>
   </data>
   <data name="DataGridCommandes_Title.Text" xml:space="preserve">
     <value>Commandes</value>

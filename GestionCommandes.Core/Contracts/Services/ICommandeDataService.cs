@@ -8,7 +8,7 @@ using GestionCommandes.Core.Models;
 namespace GestionCommandes.Core.Contracts.Services;
 public interface ICommandeDataService
 {
-    Task<IEnumerable<Commande>> GetGridDataAsync();
+    Task<IEnumerable<Commande>> GetGridDataAsync(bool ok);
     Task ModifyCommandeAsync(Commande commande);
-    Task<IEnumerable<Commande>> RefreshDataAsync();
+    Task GetExcelAsync();
 }
