@@ -1,6 +1,7 @@
 ﻿using GestionCommandes.ViewModels;
 
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Input;
 
 namespace GestionCommandes.Views;
 
@@ -32,5 +33,9 @@ public sealed partial class DataGridCommandesPage : Page
     private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
     {
        ViewModel.UpdateData();
+    }
+    private void DataGrid_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
+    {
+        ViewModel.OnMenuViewsInsertSN();
     }
 }

@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
+    xmlns:Command="clr-namespace:MyNamespace"
     xmlns:converters="using:GestionCommandes.Helpers"
     mc:Ignorable="d">
     <Page.Resources>
@@ -47,16 +48,23 @@
                     CalendarIdentifier="GregorianCalendar"
                 Margin="0,0,15,0"/>
             <TextBox TextChanged="TextBox_TextChanged" Grid.Row="0" PlaceholderText="Numéro Commande" Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,20,0" Height="24" Width="200"/>
-            <Button Command="{Binding AddSN}" Margin="0,0,0,0" HorizontalAlignment="Right" >
-                <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xe10C;"/>
-            </Button>
+            <TextBox TextChanged="TextBox_TextChanged" Grid.Row="0" PlaceholderText="Désignation" Text="{Binding DesiSearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,20,0" Height="24" Width="200"/>
+            <ComboBox SelectedItem="{Binding YearSelected, Mode=TwoWay}"
+                  PlaceholderText="Année"
+                  DisplayMemberPath="Year"
+                  SelectionChanged="ComboBox_SelectionChanged"
+                  ItemsSource="{Binding ListDate, Mode=TwoWay}"
+                  Margin="0,9,15,0"/>
+            <Button Command="{Binding AddSN}" Margin="0,0,0,0" HorizontalAlignment="Right" Content="Modifier"/>
+
         </StackPanel>
         <controls:DataGrid
             Grid.Row="1"
             AutoGenerateColumns="False"
             GridLinesVisibility="Horizontal"
             ItemsSource="{x:Bind ViewModel.SourceFiltered2.View, Mode=OneWay}"
-             SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
+             SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+            DoubleTapped="DataGrid_DoubleTapped">
             <controls:DataGrid.Resources>
                 <SolidColorBrush x:Key="DataGridColumnHeaderBackgroundColor" Color="Transparent" />
             </controls:DataGrid.Resources>

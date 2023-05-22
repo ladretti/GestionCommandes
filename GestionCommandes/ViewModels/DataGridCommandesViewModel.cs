@@ -33,6 +33,9 @@ public class DataGridCommandesViewModel : ObservableRecipient, INavigationAware,
     public CollectionViewSource SourceFiltered2 { get; private set; } = new CollectionViewSource();
     public ObservableCollection<Fournisseur> SourceFournisseurs { get; set; } = new ObservableCollection<Fournisseur>();
     public ObservableCollection<Client> SourceClients { get; set; } = new ObservableCollection<Client>();
+
+    public ObservableCollection<DateTimeOffset> ListDate { get; set; } = new ObservableCollection<DateTimeOffset>();
+
     private Client selectedClientValue;
     public Client SelectedClientValue
     {
@@ -90,6 +93,34 @@ public class DataGridCommandesViewModel : ObservableRecipient, INavigationAware,
             OnPropertyChanged(nameof(SearchText));
         }
     }
+    private string desiSearchText;
+    public string DesiSearchText
+    {
+        get
+        {
+            return desiSearchText;
+        }
+
+        set
+        {
+            desiSearchText = value;
+            OnPropertyChanged(nameof(DesiSearchText));
+        }
+    }
+
+    private DateTimeOffset yearSelected;
+    public DateTimeOffset YearSelected
+    {
+        get
+        {
+            return yearSelected;
+        }
+        set
+        {
+            yearSelected = value;
+            OnPropertyChanged(nameof(YearSelected));
+        }
+    }
     private Commande selectedItem;
     public Commande SelectedItem
     {
@@ -119,7 +150,6 @@ public class DataGridCommandesViewModel : ObservableRecipient, INavigationAware,
     public DataGridCommandesViewModel(INavigationService navigationService, ICommandeDataService sampleDataService, IFournisseurDataService fournisseurDataService, IClientDataService clientDataService)
     {
         NavigationService = navigationService;
-
         _sampleDataService = sampleDataService;
         _fournisseursDataService = fournisseurDataService;
         _clientsDataService = clientDataService;
@@ -158,13 +188,15 @@ public class DataGridCommandesViewModel : ObservableRecipient, INavigationAware,
         SourceClients.Clear();
 
         // TODO: Replace with real data.
-            var data = await _sampleDataService.GetGridDataAsync(ok);
+        var data = await _sampleDataService.GetGridDataAsync(ok);
 
         List<Fournisseur> dataFournisseurs = new List<Fournisseur>();
         List<Client> dataCLients = new List<Client>();
+        List<DateTime> dataListAnnee = new List<DateTime>();
 
         SourceClients.Add(new Client());
         SourceFournisseurs.Add(new Fournisseur());
+        //ListDate.Add(new DateTime());
 
         foreach (var item in data)
         {
@@ -175,9 +207,13 @@ public class DataGridCommandesViewModel : ObservableRecipient, INavigationAware,
             if (!string.IsNullOrEmpty(item.Fournisseur.Name))
                 if (!dataFournisseurs.Any(p => p.Name.ToUpper() == item.Fournisseur.Name.ToUpper()))
                     dataFournisseurs.Add(new Fournisseur(item.Fournisseur.Name.ToUpper()));
+            if (item.DateCommande != null)
+                if (!dataListAnnee.Any(p => p.Year == item.DateCommande.Value.Year))
+                    dataListAnnee.Add(item.DateCommande.Value);
         }
         dataCLients = dataCLients.OrderBy(q => q.Name).ToList();
         dataFournisseurs = dataFournisseurs.OrderBy(q => q.Name).ToList();
+        dataListAnnee = dataListAnnee.OrderByDescending(q => q.Year).ToList();
         foreach (var item in dataCLients)
         {
             SourceClients.Add(item);
@@ -186,7 +222,27 @@ public class DataGridCommandesViewModel : ObservableRecipient, INavigationAware,
         {
             SourceFournisseurs.Add(item);
         }
-        SourceFiltered2.Source = Source.OrderByDescending(q => q.DateCommande).ThenBy(q => q.NumCommande2).ThenBy(q => q.NumCommande).ToList();
+        foreach (var item in dataListAnnee)
+        {
+            ListDate.Add(item);
+        }
+        if (dataListAnnee.Any(p => p.Year == DateTime.Now.Year))
+        {
+            YearSelected = dataListAnnee.Where(p => p.Year == DateTime.Now.Year).FirstOrDefault();
+            SourceFiltered2.Source = Source.Where(c => c.DateCommande.HasValue && c.DateCommande.Value.Year == YearSelected.Year)
+                .OrderByDescending(q => q.DateCommande)
+                .ThenBy(q => q.NumCommande2)
+                .ThenBy(q => q.NumCommande)
+                .ToList();
+        }
+        else
+        {
+            SourceFiltered2.Source = Source
+                .OrderByDescending(q => q.DateCommande)
+                .ThenBy(q => q.NumCommande2)
+                .ThenBy(q => q.NumCommande)
+                .ToList();
+        }
         loadingDialog.Hide();
     }
 
@@ -202,8 +258,9 @@ public class DataGridCommandesViewModel : ObservableRecipient, INavigationAware,
         var data = Source.OrderByDescending(q => q.DateCommande).ThenBy(q => q.NumCommande).ToList();
 
 
-        if (SelectedClientValue?.Name != null || SelectedFournisseurValue?.Name != null || DateSelected != null || SearchText != null)
+        if (SelectedClientValue?.Name != null || SelectedFournisseurValue?.Name != null || DateSelected != null || SearchText != null || DesiSearchText != null || YearSelected != null)
         {
+            if (ListDate.Count > 0) { }
             if (SelectedClientValue != null)
             {
                 if (SelectedClientValue.Name != null)
@@ -226,7 +283,14 @@ public class DataGridCommandesViewModel : ObservableRecipient, INavigationAware,
             {
                 data = (from item in data where item.NumCommande != null && item.NumCommande.ToUpper().Contains(SearchText.ToUpper()) select item).ToList();
             }
-
+            if (!string.IsNullOrWhiteSpace(DesiSearchText))
+            {
+                data = (from item in data where item.Designation != null && item.Designation.ToUpper().Contains(DesiSearchText.ToUpper()) select item).ToList();
+            }
+            if (YearSelected != null)
+            {
+                data = (from item in data where item.DateCommande.HasValue && item.DateCommande.Value.Year == YearSelected.Year select item).ToList();
+            }
             SourceFiltered2.Source = data;
         }
 
@@ -242,12 +306,13 @@ public class DataGridCommandesViewModel : ObservableRecipient, INavigationAware,
         SelectedFournisseurValue = null;
         DateSelected = null;
         SearchText = null;
+        DesiSearchText = null;
     }
 
     private async void AddSNCommande()
     {
     }
-    private async void OnMenuViewsInsertSN()
+    public async void OnMenuViewsInsertSN()
     {
         bool ok = false;
         ContentDialog _addDialog;
@@ -294,6 +359,7 @@ public class DataGridCommandesViewModel : ObservableRecipient, INavigationAware,
             SelectedItem = cmd;
             SearchText = null;
             SearchText = cmd.NumCommande;
+            DesiSearchText = cmd.Designation;
             ok = false;
         }
     }
