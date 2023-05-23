@@ -172,20 +172,32 @@ public class DataGridCommandesViewModel : ObservableRecipient, INavigationAware,
         ContentDialog loadingDialog = new ContentDialog
         {
             Title = "Chargement en cours...",
-            Content = new ProgressRing { IsActive = true },
             CloseButtonText = "",
             IsPrimaryButtonEnabled = false,
             IsSecondaryButtonEnabled = false
         };
+        ProgressRing progressRing = new ProgressRing
+        {
+            IsActive = true,
+            VerticalAlignment = VerticalAlignment.Center,
+            HorizontalAlignment = HorizontalAlignment.Center,
+            Foreground = new SolidColorBrush(Colors.Red)
+        };
+        progressRing.SetValue(Canvas.ZIndexProperty, 100);
+
+        loadingDialog.Content = progressRing;
 
         // Affichage du ContentDialog
         loadingDialog.XamlRoot = App.MainWindow.Content.XamlRoot;
+        //loadingDialog.XamlRoot = Window.Current.Content.XamlRoot;
+
         loadingDialog.ShowAsync();
         await Task.Delay(500);
 
         Source.Clear();
         SourceFournisseurs.Clear();
         SourceClients.Clear();
+        ListDate.Clear();
 
         // TODO: Replace with real data.
         var data = await _sampleDataService.GetGridDataAsync(ok);
