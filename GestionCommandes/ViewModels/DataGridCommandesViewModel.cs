@@ -328,42 +328,43 @@ public class DataGridCommandesViewModel : ObservableRecipient, INavigationAware,
     {
         bool ok = false;
         ContentDialog _addDialog;
-
-        if (SelectedItem.QuantiteRecu != 0 || SelectedItem.SN != null || SelectedItem.DateReception != null)
+        if (SelectedItem != null)
         {
-            var page = new ModifySNPage();
-            var viewmodel = new ModifySNViewModel(SelectedItem, _sampleDataService);
-            page.DataContext = viewmodel;
-            _addDialog = new ContentDialog
+            if (SelectedItem.QuantiteRecu != 0 || SelectedItem.SN != null || SelectedItem.DateReception != null)
             {
-                Content = page,
-                Title = "Enregistrement n°" + SelectedItem.Id,
-                CloseButtonText = "Annuler",
-                PrimaryButtonText = "Valider",
-                PrimaryButtonCommand = viewmodel.ValidationCommande,
-            };
-            _addDialog.XamlRoot = App.MainWindow.Content.XamlRoot;
-            await _addDialog.ShowAsync();
-            ok = viewmodel.IsCommandExecuted;
-        }
-        else
-        {
-            Page page = new GestionSNPage();
-            var viewmodel = new GestionSNViewModel(SelectedItem, _sampleDataService);
-            page.DataContext = viewmodel;
-            _addDialog = new ContentDialog
+                var page = new ModifySNPage();
+                var viewmodel = new ModifySNViewModel(SelectedItem, _sampleDataService);
+                page.DataContext = viewmodel;
+                _addDialog = new ContentDialog
+                {
+                    Content = page,
+                    Title = "Enregistrement n°" + SelectedItem.Id,
+                    CloseButtonText = "Annuler",
+                    PrimaryButtonText = "Valider",
+                    PrimaryButtonCommand = viewmodel.ValidationCommande,
+                };
+                _addDialog.XamlRoot = App.MainWindow.Content.XamlRoot;
+                await _addDialog.ShowAsync();
+                ok = viewmodel.IsCommandExecuted;
+            }
+            else
             {
-                Content = page,
-                Title = "Enregistrement n°" + SelectedItem.Id,
-                CloseButtonText = "Annuler",
-                PrimaryButtonText = "Valider",
-                PrimaryButtonCommand = viewmodel.ValidationCommande,
-            };
-            _addDialog.XamlRoot = App.MainWindow.Content.XamlRoot;
-            await _addDialog.ShowAsync();
-            ok = viewmodel.IsCommandExecuted;
+                Page page = new GestionSNPage();
+                var viewmodel = new GestionSNViewModel(SelectedItem, _sampleDataService);
+                page.DataContext = viewmodel;
+                _addDialog = new ContentDialog
+                {
+                    Content = page,
+                    Title = "Enregistrement n°" + SelectedItem.Id,
+                    CloseButtonText = "Annuler",
+                    PrimaryButtonText = "Valider",
+                    PrimaryButtonCommand = viewmodel.ValidationCommande,
+                };
+                _addDialog.XamlRoot = App.MainWindow.Content.XamlRoot;
+                await _addDialog.ShowAsync();
+                ok = viewmodel.IsCommandExecuted;
+            }
         }
-
         if (ok)
         {
             var cmd = SelectedItem;
