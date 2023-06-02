@@ -52,7 +52,7 @@
             <ComboBox SelectedItem="{Binding YearSelected, Mode=TwoWay}"
                   PlaceholderText="Année"
                   DisplayMemberPath="Year"
-                  SelectionChanged="ComboBox_SelectionChanged"
+                  SelectionChanged="ComboBox_SelectionChanged2"
                   ItemsSource="{Binding ListDate, Mode=TwoWay}"
                   Margin="0,9,15,0"/>
             <Button Command="{Binding AddSN}" Margin="0,0,0,0" HorizontalAlignment="Right" Content="Modifier"/>

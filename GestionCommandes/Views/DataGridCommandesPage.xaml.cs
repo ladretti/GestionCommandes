@@ -25,6 +25,11 @@ public sealed partial class DataGridCommandesPage : Page
     {
         ViewModel.UpdateData();
     }
+    private void ComboBox_SelectionChanged2(object sender, SelectionChangedEventArgs e)
+    {
+        ViewModel.UpdateData();
+        ViewModel.UpdateYearData();
+    }
     private void myDatePicker_DateChanged(object sender, DatePickerValueChangedEventArgs e)
     {
         ViewModel.UpdateData();

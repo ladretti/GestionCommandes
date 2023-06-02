@@ -19,6 +19,8 @@ using Microsoft.UI;
 using Windows.UI.Core;
 using CommunityToolkit.WinUI.UI.Controls;
 using WinUIEx.Messaging;
+using Newtonsoft.Json.Linq;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace GestionCommandes.ViewModels;
 
@@ -33,6 +35,8 @@ public class DataGridCommandesViewModel : ObservableRecipient, INavigationAware,
     public CollectionViewSource SourceFiltered2 { get; private set; } = new CollectionViewSource();
     public ObservableCollection<Fournisseur> SourceFournisseurs { get; set; } = new ObservableCollection<Fournisseur>();
     public ObservableCollection<Client> SourceClients { get; set; } = new ObservableCollection<Client>();
+    public ObservableCollection<Fournisseur> SourceFournisseurs2 { get; set; } = new ObservableCollection<Fournisseur>();
+    public ObservableCollection<Client> SourceClients2 { get; set; } = new ObservableCollection<Client>();
 
     public ObservableCollection<DateTimeOffset> ListDate { get; set; } = new ObservableCollection<DateTimeOffset>();
 
@@ -213,27 +217,12 @@ public class DataGridCommandesViewModel : ObservableRecipient, INavigationAware,
         foreach (var item in data)
         {
             Source.Add(item);
-            if (!string.IsNullOrEmpty(item.Client.Name))
-                if (!dataCLients.Any(p => p.Name.ToUpper() == item.Client.Name.ToUpper()))
-                    dataCLients.Add(new Client(item.Client.Name.ToUpper()));
-            if (!string.IsNullOrEmpty(item.Fournisseur.Name))
-                if (!dataFournisseurs.Any(p => p.Name.ToUpper() == item.Fournisseur.Name.ToUpper()))
-                    dataFournisseurs.Add(new Fournisseur(item.Fournisseur.Name.ToUpper()));
             if (item.DateCommande != null)
                 if (!dataListAnnee.Any(p => p.Year == item.DateCommande.Value.Year))
                     dataListAnnee.Add(item.DateCommande.Value);
         }
-        dataCLients = dataCLients.OrderBy(q => q.Name).ToList();
-        dataFournisseurs = dataFournisseurs.OrderBy(q => q.Name).ToList();
+
         dataListAnnee = dataListAnnee.OrderByDescending(q => q.Year).ToList();
-        foreach (var item in dataCLients)
-        {
-            SourceClients.Add(item);
-        }
-        foreach (var item in dataFournisseurs)
-        {
-            SourceFournisseurs.Add(item);
-        }
         foreach (var item in dataListAnnee)
         {
             ListDate.Add(item);
@@ -246,6 +235,16 @@ public class DataGridCommandesViewModel : ObservableRecipient, INavigationAware,
                 .ThenBy(q => q.NumCommande2)
                 .ThenBy(q => q.NumCommande)
                 .ToList();
+            foreach (var item in data.Where(c => c.DateCommande.HasValue && c.DateCommande.Value.Year == YearSelected.Year))
+            {
+                if (!string.IsNullOrEmpty(item.Client.Name))
+                    if (!dataCLients.Any(p => p.Name.ToUpper() == item.Client.Name.ToUpper()))
+                        dataCLients.Add(new Client(item.Client.Name.ToUpper()));
+
+                if (!string.IsNullOrEmpty(item.Fournisseur.Name))
+                    if (!dataFournisseurs.Any(p => p.Name.ToUpper() == item.Fournisseur.Name.ToUpper()))
+                        dataFournisseurs.Add(new Fournisseur(item.Fournisseur.Name.ToUpper()));
+            }
         }
         else
         {
@@ -254,6 +253,25 @@ public class DataGridCommandesViewModel : ObservableRecipient, INavigationAware,
                 .ThenBy(q => q.NumCommande2)
                 .ThenBy(q => q.NumCommande)
                 .ToList();
+            foreach (var item in data)
+            {
+                if (!string.IsNullOrEmpty(item.Client.Name))
+                    if (!dataCLients.Any(p => p.Name.ToUpper() == item.Client.Name.ToUpper()))
+                        dataCLients.Add(new Client(item.Client.Name.ToUpper()));
+
+                if (!string.IsNullOrEmpty(item.Fournisseur.Name))
+                    if (!dataFournisseurs.Any(p => p.Name.ToUpper() == item.Fournisseur.Name.ToUpper()))
+                        dataFournisseurs.Add(new Fournisseur(item.Fournisseur.Name.ToUpper()));
+            }
+        }
+
+        foreach (var item in dataCLients)
+        {
+            SourceClients.Add(item);
+        }
+        foreach (var item in dataFournisseurs)
+        {
+            SourceFournisseurs.Add(item);
         }
         loadingDialog.Hide();
     }
@@ -311,7 +329,41 @@ public class DataGridCommandesViewModel : ObservableRecipient, INavigationAware,
             SourceFiltered2.Source = Source.OrderByDescending(q => q.DateCommande).ThenBy(q => q.NumCommande2).ThenBy(q => q.NumCommande).ToList();
         }
     }
+    public async void UpdateYearData()
+    {
+        if (YearSelected != null)
+        {
+            List<Fournisseur> dataFournisseurs = new List<Fournisseur>();
+            List<Client> dataCLients = new List<Client>();
+            if (SourceClients != null && SourceFournisseurs != null)
+            {
+                foreach (var item in Source.OrderByDescending(q => q.DateCommande).ThenBy(q => q.NumCommande).ToList().Where(c => c.DateCommande.HasValue && c.DateCommande.Value.Year == YearSelected.Year))
+                {
+                    if (!string.IsNullOrEmpty(item.Client.Name))
+                        if (!dataCLients.Any(p => p.Name.ToUpper() == item.Client.Name.ToUpper()))
+                            dataCLients.Add(new Client(item.Client.Name.ToUpper()));
 
+                    if (!string.IsNullOrEmpty(item.Fournisseur.Name))
+                        if (!dataFournisseurs.Any(p => p.Name.ToUpper() == item.Fournisseur.Name.ToUpper()))
+                            dataFournisseurs.Add(new Fournisseur(item.Fournisseur.Name.ToUpper()));
+                }
+                SelectedClientValue = null;
+                SelectedFournisseurValue = null;
+                SourceClients.Clear();
+                SourceFournisseurs.Clear();
+                SourceClients.Add(new Client());
+                SourceFournisseurs.Add(new Fournisseur());
+                foreach (var item in dataCLients)
+                {
+                    SourceClients.Add(item);
+                }
+                foreach (var item in dataFournisseurs)
+                {
+                    SourceFournisseurs.Add(item);
+                }
+            }
+        }
+    }
     private void RemoveFilter()
     {
         SelectedClientValue = null;
@@ -319,6 +371,7 @@ public class DataGridCommandesViewModel : ObservableRecipient, INavigationAware,
         DateSelected = null;
         SearchText = null;
         DesiSearchText = null;
+        UpdateData();
     }
 
     private async void AddSNCommande()

@@ -13,7 +13,7 @@
   <Identity
     Name="b0fabdf5-9da5-4ef2-ab3f-d0dd24456c51"
     Publisher="CN=Irwin LADRETTE"
-    Version="1.0.0.0" />
+    Version="1.0.2.0" />
     
   <mp:PhoneIdentity PhoneProductId="b0fabdf5-9da5-4ef2-ab3f-d0dd24456c51" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
     
